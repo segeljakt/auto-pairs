@@ -15,6 +15,9 @@ let g:AutoPairsLoaded = 1
 if !exists('g:AutoPairs')
   let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
 end
+if !exists('g:AutoPairsBS')
+  let g:AutoPairsBS = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
+end
 
 if !exists('g:AutoPairsParens')
   let g:AutoPairsParens = {'(':')', '[':']', '{':'}'}
@@ -246,12 +249,12 @@ function! AutoPairsDelete()
   end
 
   " Delete last two spaces in parens, work with MapSpace
-  if has_key(b:AutoPairs, pprev_char) && prev_char == ' ' && current_char == ' '
+  if has_key(g:AutoPairsBS, pprev_char) && prev_char == ' ' && current_char == ' '
     return "\<BS>\<DEL>"
   endif
 
   " Delete Repeated Pair eg: '''|''' [[|]] {{|}}
-  if has_key(b:AutoPairs, prev_char)
+  if has_key(g:AutoPairsBS, prev_char)
     let times = 0
     let p = -1
     while get(prev_chars, p, '') == prev_char
@@ -259,7 +262,7 @@ function! AutoPairsDelete()
       let times = times + 1
     endwhile
 
-    let close = b:AutoPairs[prev_char]
+    let close = g:AutoPairsBS[prev_char]
     let left = repeat(prev_char, times)
     let right = repeat(close, times)
 
@@ -271,8 +274,8 @@ function! AutoPairsDelete()
   end
 
 
-  if has_key(b:AutoPairs, prev_char)
-    let close = b:AutoPairs[prev_char]
+  if has_key(g:AutoPairsBS, prev_char)
+    let close = g:AutoPairsBS[prev_char]
     if match(line,'^\s*'.close, col('.')-1) != -1
       " Delete (|___)
       let space = matchstr(line, '^\s*', col('.')-1)
